@@ -8,7 +8,8 @@ const MovieCard = ({ movie }) => (
     <h3>{movie.title}</h3>
     <p>{movie.description}</p>
     <span>Жанр: {movie.genre}</span>
-    <span>Сеанс: {movie.time}</span>
+    <span>Дата сеансу: {movie.date}</span>
+    <span>Час: {movie.time}</span>
   </div>
 );
 
