@@ -1,6 +1,6 @@
 
 import React from 'react';
-import './MovieCard.css'; 
+import '../styles/MovieCard.css';
 
 const MovieCard = ({ movie }) => (
   <div className="movie-card">

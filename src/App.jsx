@@ -1,11 +1,12 @@
+
 import React from 'react';
-import movies from './data/movies';
 import MovieList from './components/MovieList';
+import movies from './data/movies';
 
 const App = () => {
   return (
     <div>
-      <h1>Список фільмів</h1>
+      <h1 style={{ textAlign: 'center' }}>Список фільмів</h1>
       <MovieList movies={movies} />
     </div>
   );
