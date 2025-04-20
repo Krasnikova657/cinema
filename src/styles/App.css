@@ -55,4 +55,34 @@
   .book-button:hover {
     background-color: #fb8c00;
   }
+  @media (max-width: 600px) {
+    .movie-card {
+      max-width: 100%;
+      margin: 10px auto;
+    }
+  
+    .navbar {
+      padding: 10px;
+    }
+  
+    .nav-logo {
+      font-size: 18px;
+    }
+  
+    .back-button,
+    .book-button {
+      font-size: 14px;
+      padding: 8px 12px;
+    }
+  
+    .hall-grid {
+      grid-template-columns: repeat(4, 40px);
+      gap: 8px;
+    }
+  
+    .seat {
+      width: 40px;
+      height: 40px;
+    }
+  }
   
