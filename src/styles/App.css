@@ -1,0 +1,58 @@
+.page-container {
+    padding: 20px;
+    font-family: 'Segoe UI', sans-serif;
+    background-color: #fff;
+    min-height: 100vh;
+  }
+  
+  .page-title {
+    text-align: center;
+    margin-bottom: 24px;
+    color: #333;
+  }
+  
+  .navbar {
+    background-color: #222;
+    padding: 15px 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .nav-logo {
+    color: #fff;
+    font-size: 20px;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  .back-button {
+    padding: 10px 16px;
+    background-color: #777;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+  }
+  
+  .back-button:hover {
+    background-color: #555;
+  }
+  
+  .book-button {
+    margin-top: 10px;
+    padding: 10px 16px;
+    background-color: #ff9800;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .book-button:hover {
+    background-color: #fb8c00;
+  }
+  
