@@ -67,6 +67,12 @@ const CinemaHall = ({ movieId }) => {
     setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
+  // Функція для форматування seatId у зрозумілий вигляд
+  const formatSeatId = (seatId) => {
+    const [row, seat] = seatId.split('-').map(Number);
+    return `Ряд ${row + 1}, Місце ${seat + 1}`;
+  };
+
   const renderSeats = () => {
     const seats = [];
     for (let row = 0; row < rows; row++) {
@@ -94,7 +100,7 @@ const CinemaHall = ({ movieId }) => {
       <div className="screen">Екран</div>
       <div className="hall-grid">{renderSeats()}</div>
       <div className="summary">
-        Обрані місця: <strong>{selectedSeats.join(', ') || 'немає'}</strong>
+        Обрані місця: <strong>{selectedSeats.map(formatSeatId).join(', ') || 'немає'}</strong>
       </div>
       <div className="booking-form">
         <input
