@@ -1,17 +1,70 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { getBookings, saveBooking } from '../services/BookingService';
 import '../styles/CinemaHall.css';
 
 const CinemaHall = ({ movieId }) => {
   const rows = 5;
   const seatsPerRow = 8;
   const [selectedSeats, setSelectedSeats] = useState([]);
+  const [bookedSeats, setBookedSeats] = useState([]);
+  const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
+  const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    // Завантажуємо заброньовані місця для фільму
+    const bookings = getBookings(movieId);
+    const booked = Object.keys(bookings);
+    setBookedSeats(booked);
+  }, [movieId]);
 
   const toggleSeat = (seatId) => {
+    if (bookedSeats.includes(seatId)) return; // Заброньовані місця не можна вибрати
     setSelectedSeats((prev) =>
       prev.includes(seatId)
         ? prev.filter((s) => s !== seatId)
         : [...prev, seatId]
     );
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!formData.name) newErrors.name = "Ім'я є обов'язковим";
+    if (!formData.phone) newErrors.phone = "Телефон є обов'язковим";
+    if (!formData.email) newErrors.email = "Email є обов'язковим";
+    else if (!/\S+@\S+\.\S+/.test(formData.email))
+      newErrors.email = "Некоректний формат email";
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleBooking = () => {
+    if (selectedSeats.length === 0) {
+      toast.error('Виберіть принаймні одне місце');
+      return;
+    }
+    if (!validateForm()) {
+      toast.error('Заповніть усі поля коректно');
+      return;
+    }
+
+    // Зберігаємо бронювання для кожного вибраного місця
+    selectedSeats.forEach((seatId) => {
+      saveBooking(movieId, seatId, formData);
+    });
+
+    // Оновлюємо заброньовані місця
+    setBookedSeats((prev) => [...prev, ...selectedSeats]);
+    setSelectedSeats([]);
+    setFormData({ name: '', phone: '', email: '' });
+    toast.success('Бронювання успішне!');
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const renderSeats = () => {
@@ -20,10 +73,11 @@ const CinemaHall = ({ movieId }) => {
       for (let seat = 0; seat < seatsPerRow; seat++) {
         const seatId = `${row}-${seat}`;
         const isSelected = selectedSeats.includes(seatId);
+        const isBooked = bookedSeats.includes(seatId);
         seats.push(
           <div
             key={seatId}
-            className={`seat ${isSelected ? 'selected' : ''}`}
+            className={`seat ${isSelected ? 'selected' : ''} ${isBooked ? 'booked' : ''}`}
             onClick={() => toggleSeat(seatId)}
             title={`Ряд ${row + 1}, Місце ${seat + 1}`}
           >
@@ -42,6 +96,34 @@ const CinemaHall = ({ movieId }) => {
       <div className="summary">
         Обрані місця: <strong>{selectedSeats.join(', ') || 'немає'}</strong>
       </div>
+      <div className="booking-form">
+        <input
+          type="text"
+          name="name"
+          placeholder="Ім'я"
+          value={formData.name}
+          onChange={handleInputChange}
+        />
+        {errors.name && <small>{errors.name}</small>}
+        <input
+          type="tel"
+          name="phone"
+          placeholder="Телефон"
+          value={formData.phone}
+          onChange={handleInputChange}
+        />
+        {errors.phone && <small>{errors.phone}</small>}
+        <input
+          type="email"
+          name="email"
+          placeholder="Email"
+          value={formData.email}
+          onChange={handleInputChange}
+        />
+        {errors.email && <small>{errors.email}</small>}
+        <button onClick={handleBooking}>Забронювати</button>
+      </div>
+      <ToastContainer position="top-right" autoClose={3000} />
     </div>
   );
 };
